@@ -199,13 +199,13 @@ namespace luMath
 
 	template <class T> unsigned Fraction<T>::s_idCounter = 1;
 
-
-	Polynomial nod(const Polynomial& A, const Polynomial& B)
+	template <class T> 
+	Polynomial<T> nod(const Polynomial<T>& A, const Polynomial<T>& B)
 	{
-		Polynomial X(A), Y(B);
+		Polynomial<T> X(A), Y(B);
 		if (A.getPower() < B.getPower()) std::swap(X, Y);
 		
-		Polynomial Z = X % Y;
+		Polynomial<T> Z = X % Y;
 		while (Z.getPower() > 0 && Z[Z.getPower()])
 		{
 			std::cout << Z;
@@ -219,23 +219,24 @@ namespace luMath
 		}
 		return Y;
 	}
-
-	Polynomial nok(Polynomial X, Polynomial Y)
+	template <class T>
+	Polynomial<T> nok(Polynomial<T> X, Polynomial<T> Y)
 	{
 		return X * Y / nod(X, Y);
 	}
 
-	template<> class Fraction<Polynomial>
+	
+	template<class T> class Fraction<Polynomial<T>>
 	{
 	private:
 		static unsigned s_idCounter;
 		unsigned m_id;
-		Polynomial m_numerator;
-		Polynomial m_denominator;
+		Polynomial<T> m_numerator;
+		Polynomial<T> m_denominator;
 
 		const Fraction& reduce()
 		{
-			Polynomial nod_f = nod(m_numerator, m_denominator);
+			Polynomial<T> nod_f = nod(m_numerator, m_denominator);
 			m_numerator /= nod_f;
 			m_denominator /= nod_f;
 			return *this;
@@ -247,83 +248,83 @@ namespace luMath
 		{
 		}
 
-		explicit Fraction(const Polynomial& numerator)
+		explicit Fraction(const Polynomial<T>& numerator)
 			: m_id(s_idCounter++), m_numerator(numerator), m_denominator({ 1.0 })
 		{
 		}
 
-		explicit Fraction(const Polynomial& numerator, const Polynomial& denominator)
-			: m_id(s_idCounter++), m_numerator(numerator), m_denominator({1.0})
+		explicit Fraction(const Polynomial<T>& numerator, const Polynomial<T>& denominator)
+			: m_id(s_idCounter++), m_numerator(numerator), m_denominator()
 		{
-			if (!denominator.getPower() && !denominator[0] )
+			if (denominator.getPower() == 0 )
 				throw std::invalid_argument("Деление на нулевой полином. Объект №" + std::to_string(m_id) + '\n');
 
 			m_denominator = denominator;
 			reduce();
 		}
 
-		Fraction(const Fraction<Polynomial>& fraction)
-			: Fraction<Polynomial>(fraction.m_numerator, fraction.m_denominator)
+		Fraction(const Fraction<Polynomial<T>>& fraction)
+			: Fraction<Polynomial<T>>(fraction.m_numerator, fraction.m_denominator)
 		{ }
 
-		const Fraction<Polynomial>& operator+=(const Fraction<Polynomial>& fraction)
+		const Fraction<Polynomial<T>>& operator+=(const Fraction<Polynomial<T>>& fraction)
 		{
-			Polynomial nok_f = nok(m_denominator, fraction.m_denominator);
+			Polynomial<T> nok_f = nok(m_denominator, fraction.m_denominator);
 			m_numerator      = nok_f / m_denominator * m_numerator
 							 + nok_f / fraction.m_denominator * fraction.m_numerator;
 			m_denominator    = nok_f;
 			reduce();
 			return *this;
 		}
-		const Fraction<Polynomial>& operator+=(const Polynomial& polynom)
+		const Fraction<Polynomial<T>>& operator+=(const Polynomial<T>& polynom)
 		{
 			m_numerator += polynom * m_denominator;
 			reduce();
 			return *this;
 		}
 
-		const Fraction<Polynomial>& operator-=(const Fraction<Polynomial>& fraction)
+		const Fraction<Polynomial<T>>& operator-=(const Fraction<Polynomial<T>>& fraction)
 		{
-			Polynomial nok_f = nok(m_denominator, fraction.m_denominator);
+			Polynomial<T> nok_f = nok(m_denominator, fraction.m_denominator);
 			m_numerator      = nok_f / m_denominator * m_numerator
 						     - nok_f / fraction.m_denominator * fraction.m_numerator;
 			m_denominator = nok_f;
 			reduce();
 			return *this;
 		}
-		const Fraction<Polynomial>& operator-=(const Polynomial& polynom)
+		const Fraction<Polynomial<T>>& operator-=(const Polynomial<T>& polynom)
 		{
 			m_numerator -= polynom * m_denominator;
 			reduce();
 			return *this;
 		}
-		const Fraction<Polynomial>& operator*=(const Fraction<Polynomial>& fraction)
+		const Fraction<Polynomial<T>>& operator*=(const Fraction<Polynomial<T>>& fraction)
 		{
 			m_numerator *= fraction.m_numerator;
 			m_denominator *= fraction.m_denominator;
 			reduce();
 			return *this;
 		}
-		const Fraction<Polynomial>& operator*=(const Polynomial& polynom)
+		const Fraction<Polynomial<T>>& operator*=(const Polynomial<T>& polynom)
 		{
 			m_numerator *= polynom;
 			reduce();
 			return *this;
 		}
-		const Fraction<Polynomial>& operator/=(const Fraction<Polynomial>& fraction)
+		const Fraction<Polynomial<T>>& operator/=(const Fraction<Polynomial<T>>& fraction)
 		{
 			m_numerator *= fraction.m_denominator;
 			m_denominator *= fraction.m_numerator;
 			reduce();
 			return *this;
 		}
-		const Fraction<Polynomial>& operator/=(const Polynomial& polynom)
+		const Fraction<Polynomial<T>>& operator/=(const Polynomial<T>& polynom)
 		{
 			m_denominator *= polynom;
 			reduce();
 			return *this;
 		}
-		const Fraction<Polynomial>& operator=(const Fraction<Polynomial>& fraction)
+		const Fraction<Polynomial<T>>& operator=(const Fraction<Polynomial<T>>& fraction)
 		{
 			if (this == &fraction)
 				return *this;
@@ -332,13 +333,13 @@ namespace luMath
 			m_denominator = fraction.m_denominator;
 			return *this;
 		}
-		const Fraction<Polynomial>& operator=(const Polynomial& polynom)
+		const Fraction<Polynomial<T>>& operator=(const Polynomial<T>& polynom)
 		{
 			m_numerator = polynom;
-			m_denominator = Polynomial({ 1.0 });
+			m_denominator = Polynomial<T>({ 1.0 });
 			return *this;
 		}
-		const Fraction<Polynomial>& operator=(Fraction<Polynomial>&& fraction)
+		const Fraction<Polynomial<T>>& operator=(Fraction<Polynomial<T>>&& fraction)
 		{
 			if (this == &fraction)
 				return *this;
@@ -352,7 +353,7 @@ namespace luMath
 		{
 			return m_numerator.getPower() < m_denominator.getPower();
 		}
-		friend std::ostream& operator<<(std::ostream& out, const Fraction<Polynomial>& fraction)
+		friend std::ostream& operator<<(std::ostream& out, const Fraction<Polynomial<T>>& fraction)
 		{
 			std::streamsize width = out.width(), precision = out.precision();
 			out  << std::setw(width) << std::setprecision(precision) << fraction.m_numerator
@@ -366,27 +367,33 @@ namespace luMath
 					  << ". " << std::setw(width) << std::setprecision(precision) << m_numerator % m_denominator
 					  << "/" << std::setw(width) << std::setprecision(precision) << m_denominator;
 		}
-		friend Fraction<Polynomial> operator+(const Fraction<Polynomial>& f1, const Fraction<Polynomial>& f2)
+		friend Fraction<Polynomial<T>> operator+(const Fraction<Polynomial<T>>& f1, const Fraction<Polynomial<T>>& f2)
 		{
-			return Fraction<Polynomial>(f1) += f2;
+			return Fraction<Polynomial<T>>(f1) += f2;
 		}
-		friend Fraction<Polynomial> operator-(const Fraction<Polynomial>& f1, const Fraction<Polynomial>& f2)
+		friend Fraction<Polynomial<T>> operator-(const Fraction<Polynomial<T>>& f1, const Fraction<Polynomial<T>>& f2)
 		{
-			return Fraction<Polynomial>(f1) -= f2;
+			return Fraction<Polynomial<T>>(f1) -= f2;
 		}
-		friend Fraction<Polynomial> operator*(const Fraction<Polynomial>& f1, const Fraction<Polynomial>& f2)
+		friend Fraction<Polynomial<T>> operator*(const Fraction<Polynomial<T>>& f1, const Fraction<Polynomial<T>>& f2)
 		{
-			return Fraction<Polynomial>(f1) *= f2;
+			return Fraction<Polynomial<T>>(f1) *= f2;
 		}
-		friend Fraction<Polynomial> operator/(const Fraction<Polynomial>& f1, const Fraction<Polynomial>& f2)
+		friend Fraction<Polynomial<T>> operator/(const Fraction<Polynomial<T>>& f1, const Fraction<Polynomial<T>>& f2)
 		{
-			return Fraction<Polynomial>(f1) /= f2;
+			return Fraction<Polynomial<T>>(f1) /= f2;
 		}
-		const Polynomial& getNumerator() const
+		
+		friend bool operator==(const Fraction<T>& f1, int x)
+		{
+			return f1.getNumerator == x;
+		}
+
+		const Polynomial<T>& getNumerator() const
 		{
 			return m_numerator;
 		}
-		const Polynomial& getDenominator() const
+		const Polynomial<T>& getDenominator() const
 		{
 			return m_denominator;
 		}
@@ -396,5 +403,5 @@ namespace luMath
 		}
 	};
 
-	 unsigned Fraction<Polynomial>::s_idCounter = 1;
+	 template<class T> unsigned Fraction<Polynomial<T>>::s_idCounter = 1;
 }
