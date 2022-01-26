@@ -33,7 +33,7 @@ int main()
     setlocale(LC_ALL, "Rus");
     srand(static_cast<unsigned int>(time(0)));
     rand();
-    
+    /*
     {
         hed("ТЕСТИРОВАНИЕ КЛАССА MATRIX");
 
@@ -246,7 +246,7 @@ int main()
     }
     system("pause");
     system("cls");
-    
+    */
     
     /*Matrix<int>* array_matrix0 = new Matrix<int>[]
                                     { Matrix<int>({ 4,5,9,4 }, 2, 2),
@@ -255,7 +255,7 @@ int main()
                                       Matrix<int>({ 4,5,9,4 }, 2, 2) };
     Matrix<Matrix<int>> matrix166(2, 2, array_matrix0);
     std::cout << std::setw(5) << matrix166 << std::endl;*/
-    
+    /*
 
     MatrixAdd array_matrix[] = { MatrixAdd(2, 2, {4,5,9,4}), MatrixAdd(3, 5,{94,6,71,4,6,7,5,1,16,5,2,20,21,22,48}),
                                  MatrixAdd(1, 3, {94,6,71}), MatrixAdd(2, 2,{4,5,9,4})};
@@ -282,7 +282,7 @@ int main()
     std::cout << std::setw(10) << matrixTest3 + matrixTest4;
     system("pause");
     system("cls");
-    
+    */
     
     std::cout << "\n\tПроверка класса Fraction:\n\t"
 		<< Fraction<int>(1, 8) << " + " << Fraction<int>(7, 12) << " = " << Fraction<int>(1, 8) + Fraction<int>(7, 12) << "\n\t"
@@ -293,33 +293,33 @@ int main()
 		<< Fraction<long>(24) << " / " << Fraction<long>(4, 5) << " = " << Fraction<long>(24) / Fraction<long>(4, 5) << "\n\t";
 	
 	std::cout << "\n\tПроверка класса Polynomial:\n\t";
-	double array1[5] = { 0,2,0,4,5 };
-	double array2[5] = { 0,2,0,-4,-5 };
-	Polynomial polymon1(5, array1);
+	int array1[5] = { 0,2,0,4,5 };
+	int array2[5] = { 0,2,0,-4,-5 };
+	Polynomial<int> polymon1(5, array1);
 	//Polynomial polymon2(5.5);
-	Polynomial polymon2(5, array2);
-	Polynomial polymon3(polymon1+ polymon2);
+	Polynomial<int> polymon2(5, array2);
+	Polynomial<int> polymon3(polymon1+ polymon2);
 	std::cout << "\n\tСложение полиномов:\n\t+"
 		<< std::setw(3) << polymon1 << "\n\t "
 		<< std::setw(3) << polymon2 << "\n\t ============================\n\t "
 		<< std::setw(3) << polymon3 << std::endl;
 
 
-	double array3[4] = { 0,2,0,-4 };
-	double array4[8] = { 1,2,0,4,5,0,15,0 };
-	Polynomial polymon4(4, array3);
-	Polynomial polymon5(8, array4);
-	Polynomial polymon6(polymon4 - polymon5);
+	int array3[4] = { 0,2,0,-4 };
+	int array4[8] = { 1,2,0,4,5,0,15,0 };
+	Polynomial<int> polymon4(4, array3);
+	Polynomial<int> polymon5(8, array4);
+	Polynomial<int> polymon6(polymon4 - polymon5);
 	std::cout << "\n\tРазница полиномов:\n\t-"
 		<< std::setw(3) << polymon4 << "\n\t "
 		<< std::setw(3) << polymon5 << "\n\t ====================================\n\t "
 		<< std::setw(3) << polymon6 << std::endl;
 
-	double array5[2] = { 2,2 };
-	double array6[2] = { 3,1 };
-	Polynomial polymon7(2, array5);
-	Polynomial polymon8(2, array6);
-	Polynomial polymon9(polymon7 * polymon8);
+	int array5[2] = { 2,2 };
+	int array6[2] = { 3,1 };
+	Polynomial<int> polymon7(2, array5);
+	Polynomial<int> polymon8(2, array6);
+	Polynomial<int> polymon9(polymon7 * polymon8);
 	std::cout << "\n\tПроизведение полиномов:\n\t( "
 	    << polymon7 << ") * ( "
 	    << polymon8 << " ) = ( "
@@ -327,47 +327,50 @@ int main()
 
 	std::cout << "\n\tДеление полиномов:\n";
 	std::cout << "\n\tСлучай, когда степень делимого больше степени делителя:\n\t";
-	Polynomial p1({ 4,-2,-1,1 });
-	Polynomial p2({ 1,-3,1 });
-	Polynomial res_int = p1 / p2;
-	Polynomial res_rest = p1 % p2;
+	Polynomial<int> p1({ 4,-2,-1,1 });
+	Polynomial<int> p2({ 1,-3,1 });
+	Polynomial<int> res_int = p1 / p2;
+	Polynomial<int> res_rest = p1 % p2;
 	std::cout << "делимое= " << p1 << "\t||"
 			  << "делитель= " << p2 << "\n\t"
 			  << "\t\t\t\t|||||||||||||||||||||||||\n\t"
 			  << "остаток= " << res_rest << "\t\t\t||"
 			  << "целое= " << res_int << std::endl;
-	Polynomial check = res_int * p2 + res_rest;
+	Polynomial<int> check = res_int * p2 + res_rest;
 	std::cout << "\n\tПроверка\n\t:> целое * делитель + остаток = \n\t\tделимое = " << check << '\n';
 
 	std::cout << "\n\tСлучай, когда степень делимого меньше степени делителя:\n\t";
-	Polynomial p3({ 1,-3,1 });
-	Polynomial p4({ 4,-2,-1,1 });
-	Polynomial res_int_less = p3 / p4;
-	Polynomial res_rest_less = p3 % p4;
+	Polynomial<int> p3({ 1,-3,1 });
+	Polynomial<int> p4({ 4,-2,-1,1 });
+	Polynomial<int> res_int_less = p3 / p4;
+	Polynomial<int> res_rest_less = p3 % p4;
 	std::cout << "делимое= " << p3 << "\t\t||"
 		<< "делитель= " << p4 << "\n\t"
 		<< "\t\t\t\t||||||||||||||||||||||||||||||\n\t"
 		<< "остаток= " << res_rest_less << "\t\t||"
 		<< "целое= " << res_int_less << std::endl;
-	Polynomial check_less = res_int_less * p4 + res_rest_less;
+	Polynomial<int> check_less = res_int_less * p4 + res_rest_less;
 	std::cout << "\n\tПроверка\n\t:> целое * делитель + остаток = \n\t\tделимое = " << check_less << '\n';
 
 
 	std::cout << "\n\tСлучай, когда степень делимого равна степени делителя:\n\t";
-	Polynomial p5({ 1,-3,1 });
-	Polynomial p6({ 4,-2,-1 });
-	Polynomial res_int_equal = p5 / p6;
-	Polynomial res_rest_equal = p5 % p6;
+	Polynomial<int> p5({ 1,-3,1 });
+	Polynomial<int> p6({ 4,-2,-1 });
+	Polynomial<int> res_int_equal = p5 / p6;
+	Polynomial<int> res_rest_equal = p5 % p6;
 	std::cout << "делимое= " << p5 << "\t\t||"
 		<< "делитель= " << p6 << "\n\t"
 		<< "\t\t\t\t||||||||||||||||||||||||||||||\n\t"
 		<< "остаток= " << res_rest_equal << "\t\t\t||"
 		<< "целое= " << res_int_equal << std::endl;
-	Polynomial check_equal = res_int_equal * p6 + res_rest_equal;
+	Polynomial<int> check_equal = res_int_equal * p6 + res_rest_equal;
 	std::cout << "\n\tПроверка\n\t:> целое * делитель + остаток = \n\t\tделимое = " << check_equal << '\n';
     
 
-    Fraction<Polynomial> polyfrac0(Polynomial({ 4,-2,-1,1 }), Polynomial({ 1,-3,1 }));
+    /*Fraction<Polynomial<Fraction<int>>> polyfrac0(
+        Polynomial<Fraction<int>>({ Fraction<int>(1,5),Fraction<int>(-4,5),Fraction<int>(7,2),Fraction<int>(81,9)}), 
+        Polynomial<Fraction<int>>({ Fraction<int>(21,7),Fraction<int>(2,22),Fraction<int>(4,1) }));*/
+    Fraction<Polynomial<char>> polyfrac0(Polynomial<char>({ 4,-2,-1,1 }), Polynomial<char>({ 1,-3,1 }));
     std::cout << "\n\tПроверка полиномиальной дроби: " << p1 << '/' << p2 << "\n=" << polyfrac0 << "\n=";
     polyfrac0.out_incorrect_fraction_polynom();
 
