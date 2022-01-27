@@ -367,13 +367,25 @@ int main()
 	std::cout << "\n\tПроверка\n\t:> целое * делитель + остаток = \n\t\tделимое = " << check_equal << '\n';
     
 
-    /*Fraction<Polynomial<Fraction<int>>> polyfrac0(
-        Polynomial<Fraction<int>>({ Fraction<int>(1,5),Fraction<int>(-4,5),Fraction<int>(7,2),Fraction<int>(81,9)}), 
+    
+    Fraction<Polynomial<int>> polyfrac0(Polynomial<int>({ 0,2,0,-4,-5 }), Polynomial<int>({ 0,2,0,-4 }));
+    Polynomial<int> p7({ 0,4,0,17,14 });
+    Polynomial<int> p8({ 0,-4,0,19 });
+    Fraction<Polynomial<int>> polyfrac1(p7, p8);
+
+    std::cout << "\n\tПроверка полиномиальной дроби: \n" 
+        << polymon2 << '/' << polymon4 << "\n=" << polyfrac0 << "\n\n"
+        << p7 << '/' << p8 << "\n=" << polyfrac1 << "\n";
+    std::cout << "\n\tСложение полиномов";
+    std::cout << polyfrac0 << '+'<< polyfrac1  << " = \n" << polyfrac0 + polyfrac1;
+    std::cout << "\n\tВычитание полиномов";
+    std::cout << polyfrac1 << '-' << polyfrac0 << " = \n" << polyfrac1 - polyfrac0;
+    std::cout << "\n\tДеление полиномов";
+    std::cout << polyfrac0 << '*' << polyfrac1 << " = \n" << polyfrac0 / polyfrac1;
+
+
+   /* Fraction<Polynomial<Fraction<int>>> polyfrac2(
+        Polynomial<Fraction<int>>({ Fraction<int>(1,5),Fraction<int>(-4,5),Fraction<int>(7,2),Fraction<int>(81,9)}),
         Polynomial<Fraction<int>>({ Fraction<int>(21,7),Fraction<int>(2,22),Fraction<int>(4,1) }));*/
-    Fraction<Polynomial<char>> polyfrac0(Polynomial<char>({ 4,-2,-1,1 }), Polynomial<char>({ 1,-3,1 }));
-    std::cout << "\n\tПроверка полиномиальной дроби: " << p1 << '/' << p2 << "\n=" << polyfrac0 << "\n=";
-    polyfrac0.out_incorrect_fraction_polynom();
-
-
 
 }
