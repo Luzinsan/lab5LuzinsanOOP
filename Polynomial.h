@@ -167,7 +167,7 @@ namespace luMath
 
 		const Polynomial& operator%=(const Polynomial<T>& polynomial)
 		{
-			if (!polynomial.m_coeff[polynomial.m_length-1])
+			if (!polynomial.getPower() && !polynomial.m_coeff[polynomial.m_length - 1])
 				throw std::logic_error("Деление на ноль\n");
 
 			int new_power = getPower() - polynomial.getPower();
@@ -255,21 +255,30 @@ namespace luMath
 
 			out.width(width);
 
-			std::cout << " ( " << polynomial.m_coeff[0];
+			if (polynomial.getPower() + 1 == 1) { std::cout << polynomial.m_coeff[0]; return out; }
+			std::cout << " ( ";
+			bool flag = false;
 
-			for (unsigned i = 1; i < polynomial.m_length; i++)
+			for (unsigned i = 0; i < polynomial.m_length; i++)
 			{
 				if (polynomial.m_coeff[i] == 0)
 					continue;
 
-				out << (polynomial.m_coeff[i] > 0 ? " + " : " - ");
-				out.width(width);
-
-				if (std::abs(polynomial.m_coeff[i]) != 1)
-					out << (polynomial.m_coeff[i] > 0 ? polynomial.m_coeff[i] : -polynomial.m_coeff[i]);
-
-				if (i == 1) out << "x";
-				else    	out << "x^" << i;
+				if (flag) 
+				{ 
+					out << (polynomial.m_coeff[i] > 0 ? " + " : " - "); 
+					if (std::abs(polynomial.m_coeff[i]) != 1)
+						out << std::setw(width) << (polynomial.m_coeff[i] > 0 ? polynomial.m_coeff[i] : -polynomial.m_coeff[i]);
+				}
+				else 
+				{
+					if (std::abs(polynomial.m_coeff[i]) != 1 || !i)
+						out << std::setw(width) << polynomial.m_coeff[i];
+					flag = true;
+				}
+				
+				if (i == 1)     out << "x";
+				else if (i > 1) out << "x^" << i;
 			}
 			std::cout << " ) ";
 			return out;
@@ -285,7 +294,7 @@ namespace luMath
 		{
 			return m_id;
 		}
-		unsigned getPower() const
+		int getPower() const
 		{
 			return m_length-1;
 		}
