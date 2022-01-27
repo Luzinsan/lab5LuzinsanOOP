@@ -208,7 +208,7 @@ namespace luMath
 		Polynomial<T> Z = X % Y;
 		while (Z.getPower() > 0 && Z[Z.getPower()])
 		{
-			std::cout << Z;
+			
 
 			X = Y;
 			Y = Z;
@@ -256,7 +256,7 @@ namespace luMath
 		explicit Fraction(const Polynomial<T>& numerator, const Polynomial<T>& denominator)
 			: m_id(s_idCounter++), m_numerator(numerator), m_denominator()
 		{
-			if (denominator.getPower() == 0 )
+			if (denominator.getPower()+1 == 0 )
 				throw std::invalid_argument("Деление на нулевой полином. Объект №" + std::to_string(m_id) + '\n');
 
 			m_denominator = denominator;
