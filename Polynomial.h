@@ -65,7 +65,7 @@ namespace luMath
 		{
 
 			for (int max_index = m_length-1; max_index >= 0; max_index--)
-				if (m_coeff[max_index])
+				if (m_coeff[max_index] != 0)
 				{
 					if (m_length != max_index+1)
 					{
@@ -143,7 +143,7 @@ namespace luMath
 
 		const Polynomial& operator/=(const Polynomial<T>& polynomial)
 		{
-			if (!polynomial.m_coeff[polynomial.m_length - 1])
+			if (polynomial.m_coeff[polynomial.m_length - 1] == 0)
 				throw std::logic_error("Деление на ноль\n");
 
 			int new_power = getPower() - polynomial.getPower();
@@ -167,7 +167,8 @@ namespace luMath
 
 		const Polynomial& operator%=(const Polynomial<T>& polynomial)
 		{
-			if (!polynomial.getPower() && !polynomial.m_coeff[polynomial.m_length - 1])
+			if (!polynomial.getPower() && 
+				 polynomial.m_coeff[polynomial.m_length - 1] == 0)
 				throw std::logic_error("Деление на ноль\n");
 
 			int new_power = getPower() - polynomial.getPower();
@@ -267,12 +268,12 @@ namespace luMath
 				if (flag) 
 				{ 
 					out << (polynomial.m_coeff[i] > 0 ? " + " : " - "); 
-					if (std::abs(polynomial.m_coeff[i]) != 1)
+					if ((polynomial.m_coeff[i] > 0 ? polynomial.m_coeff[i] : -polynomial.m_coeff[i]) != 1)
 						out << std::setw(width) << (polynomial.m_coeff[i] > 0 ? polynomial.m_coeff[i] : -polynomial.m_coeff[i]);
 				}
 				else 
 				{
-					if (std::abs(polynomial.m_coeff[i]) != 1 || !i)
+					if ((polynomial.m_coeff[i] > 0 ? polynomial.m_coeff[i] : -polynomial.m_coeff[i]) != 1 || !i)
 						out << std::setw(width) << polynomial.m_coeff[i];
 					flag = true;
 				}
@@ -319,10 +320,7 @@ namespace luMath
 		{
 			return Polynomial<T>(p1) -= p2;
 		}
-		/*friend bool operator==(const T& p1, int x)
-		{
-			return p1 == 0 && p1[0] == x;
-		}*/
+		
 	};
 
 	template<class T> unsigned Polynomial<T>::s_idCounter = 0;
