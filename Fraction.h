@@ -33,14 +33,14 @@ namespace luMath
 
 		const Fraction& reduce()
 		{
-			T nod_f = nod(abs(m_numerator), abs(m_denominator));
-			m_numerator /= (int)nod_f;
+			T nod_f = nod(m_numerator, m_denominator);
+			m_numerator /= nod_f;
 			m_denominator /= nod_f;
 			return *this;
 		}
 
 	public:
-		explicit Fraction(const T& numerator = 0, const T& denominator = 1)
+		Fraction(const T& numerator, const T& denominator = 1)
 			: m_id(s_idCounter++), m_numerator(numerator), m_denominator(denominator)
 		{
 			if (!m_denominator)
@@ -53,7 +53,7 @@ namespace luMath
 			reduce();
 		}
 
-		explicit Fraction()
+		Fraction()
 			: m_id(s_idCounter++), m_numerator(0), m_denominator(1)
 		{
 		}
@@ -182,6 +182,28 @@ namespace luMath
 			return Fraction<T>(f1) /= f2;
 		}
 
+
+		friend bool operator==(const Fraction<T>& f1, int x)
+		{
+			return f1.getNumerator() / f1.getDenominator() == x;
+		}
+		friend bool operator!=(const Fraction<T>& f1, int x)
+		{
+			return !(f1 == 0);
+		}
+		friend bool operator>(const Fraction<T>& f1, int x)
+		{
+			return f1.getNumerator() / f1.getDenominator() > x;
+		}
+		friend bool operator<(const Fraction<T>& f1, int x)
+		{
+			return f1.getNumerator() / f1.getDenominator() < x;
+		}
+		Fraction<T> operator-() const
+		{
+			return Fraction<T>(-m_numerator, m_denominator);
+		}
+		
 		
 		const T& getNumerator() const
 		{
@@ -206,7 +228,7 @@ namespace luMath
 		if (A.getPower() < B.getPower()) std::swap(X, Y);
 		
 		Polynomial<T> Z = X % Y;
-		while (Z.getPower() > 0 && Z[Z.getPower()])
+		while (Z.getPower() > 0 && (Z[Z.getPower()] != 0) )
 		{
 			
 
@@ -384,10 +406,9 @@ namespace luMath
 			return Fraction<Polynomial<T>>(f1) /= f2;
 		}
 		
-		friend bool operator==(const Fraction<T>& f1, int x)
-		{
-			return f1.getNumerator == x;
-		}
+		
+
+
 
 		const Polynomial<T>& getNumerator() const
 		{
