@@ -152,15 +152,19 @@ namespace luMath
 
         const Matrix<T>& operator=(const Matrix<T>& matrix)
         {
-            Base<T>::operator=(matrix);
-            return *this;
+            return Base<T>::operator=(matrix);
+        }
+
+        const Matrix<T>& operator=(int x)
+        {
+            return Base<T>::operator=(x);
         }
 
         const Matrix<T>& operator=(Matrix<T>&& matrix) noexcept
         {
-            Base<T>::operator=(std::move(matrix));
-            return *this;
+            return Base<T>::operator=(std::move(matrix));
         }
+
     };
 
 }
