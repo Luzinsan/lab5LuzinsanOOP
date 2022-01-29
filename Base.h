@@ -1,4 +1,5 @@
 #pragma once
+#pragma once
 #include <iostream>
 #include <iomanip>
 #include <string>
@@ -13,8 +14,8 @@ namespace luMath
 		unsigned m_id, m_rows, m_cols;
 		T* m_item;
 
-		Base() 
-			: m_rows(0), m_cols(0), m_item(NULL), m_id(s_idCounter++) 
+		Base()
+			: m_rows(0), m_cols(0), m_item(NULL), m_id(s_idCounter++)
 		{
 		}
 
@@ -35,7 +36,7 @@ namespace luMath
 					m_item[iii] = 0;
 		}
 
-		Base(const std::initializer_list<T> list, int rows=0, int cols=0): Base<T>()
+		Base(const std::initializer_list<T> list, int rows = 0, int cols = 0) : Base<T>()
 		{
 			if (list.size() == rows * cols)
 				*this = std::move(Base<T>(rows, cols));
@@ -60,7 +61,7 @@ namespace luMath
 		Base(const Base<T>& base) noexcept
 			: Base<T>(base.m_rows, base.m_cols, base.m_item)
 		{}
-		
+
 		Base(Base<T>&& base) noexcept
 			: Base<T>()
 		{
@@ -138,10 +139,10 @@ namespace luMath
 		{
 			for (unsigned iii = 0; iii < m_rows; ++iii)
 				for (unsigned jjj = 0; jjj < m_cols; ++jjj)
-					if(iii==jjj)
-						m_item[iii*m_rows + jjj] = x;
+					if (iii == jjj)
+						m_item[iii * m_rows + jjj] = x;
 			return *this;
-		
+
 		}
 
 
@@ -205,10 +206,13 @@ namespace luMath
 			for (unsigned iii = 0; iii < m_rows; ++iii)
 				for (unsigned jjj = 0; jjj < base.m_cols; ++jjj)
 				{
-					temp = 0;
 					for (unsigned kkk = 0; kkk < base.m_rows; ++kkk)
-						temp += m_item[iii * m_cols + kkk]
-						* base.m_item[kkk * base.m_cols + jjj];
+						if(kkk)
+							temp += m_item[iii * m_cols + kkk]
+							* base.m_item[kkk * base.m_cols + jjj];
+						else
+							temp = m_item[iii * m_cols + kkk]
+							* base.m_item[kkk * base.m_cols + jjj];
 					new_array[iii * base.m_cols + jjj] = temp;
 				}
 			delete[] m_item;
@@ -256,7 +260,7 @@ namespace luMath
 
 		friend std::ostream& operator<<(std::ostream& out, const Base<T>& X)
 		{
-			std::streamsize width = out.width(), precision= out.precision();
+			std::streamsize width = out.width(), precision = out.precision();
 			if (!width) width = 5;
 			for (unsigned iii = 0; iii < X.m_rows; iii++)
 			{
