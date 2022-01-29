@@ -134,13 +134,15 @@ namespace luMath
 			return *this;
 		}
 
-		/*T& operator=(int base)
+		const Base<T>& operator=(int x)
 		{
-			for (unsigned iii = 0; iii < m_rows * m_cols; ++iii)
-				m_item[iii] = base;
+			for (unsigned iii = 0; iii < m_rows; ++iii)
+				for (unsigned jjj = 0; jjj < m_cols; ++jjj)
+					if(iii==jjj)
+						m_item[iii*m_rows + jjj] = x;
 			return *this;
 		
-		}*/
+		}
 
 
 		const Base<T>& operator=(Base<T>&& base) noexcept
